@@ -1,0 +1,12 @@
+project(set10108-lab01)
+cmake_minimum_required(VERSION 3.17)
+set(CMAKE_CXX_STANDARD 17)
+include_directories(../contrib)
+
+add_executable(hello_world hello_world.cpp)
+add_executable(parameter_thread parameter_thread.cpp)
+add_executable(multiple_tasks multiple_tasks.cpp)
+add_executable(lambda lambda.cpp)
+add_executable(lambda-thread lambda-thread.cpp)
+add_executable(timing timing.cpp)
+add_executable(monte-carlo-pi monte-carlo-pi.cpp)
