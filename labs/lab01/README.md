@@ -745,6 +745,10 @@ You should record your results and the hardware configuration you used. For exam
 
 The processor used was a six core. Notice that performance improves up to a point, and then it actually starts to drop as the number of threads increases. This is due to threads (in particular switching threads on cores) having an overhead. The more threads you create, the greater the overhead. You can also produce a bar chart to illustrate the results (e.g. via Excel).
 
+## If you have time - Extend Monte Carlo simulation to accumulate in-circle samples
+
+Instead of calculating a pi value in the monte_carlo_pi function, return the number of in_circle results and accumulate over all threads. You'll need a vector of integers to hold in-circle variables for each thread. After all threads are finished, you can accumulate the in-circle variables and calculate pi appropriately
+
 **You are expected to gather timing results and produce tables and charts as shown in this tutorial.** You should keep a logbook of some form to do this.
 
 ## If you have time - User-level Threads with Boost.Fibers
