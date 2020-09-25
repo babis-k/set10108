@@ -34,7 +34,7 @@ using namespace std::chrono;
 // This is some sample code provided for use within tasks/threads. 
 struct work_pile_t
 {
-    // return if we managed to pop a load from the pile (we can pop only if the number of items is greater than 0)
+    // return if we managed to pop a load from the pile (we can pop only if the number of items is greater than 0), otherwise return empty string
     std::string Pop()
     {
         std::lock_guard<std::mutex> guard(mutex);
@@ -47,7 +47,7 @@ struct work_pile_t
         return work_item;
     }
 
-    // increment the size of the pile
+    // Add a new item on the pile
     void Put(const std::string& work_item)
     {
         std::lock_guard<std::mutex> guard(mutex);
@@ -66,6 +66,7 @@ private:
 };
 
 
+// A function to generate a vector of words
 const std::vector<std::string> LoremIpsumParts() {
     std::string txt = R"(Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa massa ultricies mi quis hendrerit dolor magna. Duis convallis convallis tellus id interdum velit laoreet id. Nulla aliquet enim tortor at auctor urna nunc id cursus. Aliquet eget sit amet tellus cras adipiscing. Enim diam vulputate ut pharetra sit. Massa id neque aliquam vestibulum morbi blandit cursus risus. Placerat in egestas erat imperdiet sed. Arcu felis bibendum ut tristique et egestas. Nec nam aliquam sem et tortor consequat. Purus ut faucibus pulvinar elementum integer. Pulvinar neque laoreet suspendisse interdum consectetur libero id faucibus. Tincidunt eget nullam non nisi est sit amet facilisis magna. Tincidunt id aliquet risus feugiat in ante metus dictum at. Sagittis vitae et leo duis. Eget mauris pharetra et ultrices neque ornare aenean euismod. Consequat nisl vel pretium lectus quam id leo. Eget nunc scelerisque viverra mauris in aliquam sem.
 At varius vel pharetra vel. Faucibus a pellentesque sit amet. Aliquet porttitor lacus luctus accumsan tortor posuere. Enim nec dui nunc mattis enim ut tellus. Amet porttitor eget dolor morbi. Tempus quam pellentesque nec nam aliquam sem et tortor consequat. Egestas integer eget aliquet nibh praesent. Turpis massa tincidunt dui ut ornare lectus sit. Commodo quis imperdiet massa tincidunt nunc pulvinar sapien et ligula. Orci nulla pellentesque dignissim enim sit amet venenatis. Scelerisque in dictum non consectetur. Sed sed risus pretium quam vulputate. Imperdiet sed euismod nisi porta lorem mollis aliquam ut porttitor. Arcu odio ut sem nulla pharetra diam sit amet nisl. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Integer enim neque volutpat ac tincidunt vitae semper quis lectus. Lorem mollis aliquam ut porttitor.
@@ -101,26 +102,90 @@ Dui nunc mattis enim ut tellus. Dictum non consectetur a erat nam at lectus urna
     return output;
 }
 
+// Initialize a constant global variable with all random words
 static const std::vector<std::string> g_LoremIpsumParts = LoremIpsumParts();
+
+// Fixed processor task
+void task_fixed_processor(work_pile_t& work)
+{
+    while (true) // keep running while there's still work to be done
+    {
+        auto text = work.Pop(); // this gets a work item, if one is available
+        if (!text.empty())
+        {
+            if (text.length() <= 4)
+            {
+                printf("task_fixed_processor from thread %u on %s\n", this_thread::get_id(), text.c_str());
+                this_thread::sleep_for(std::chrono::milliseconds(2)); // sleep for 5 milliseconds
+            }
+            else
+                work.Put(text);
+        }
+        this_thread::sleep_for(std::chrono::milliseconds(5)); // sleep for 5 milliseconds, so that we don't Pop() as fast as possibly, as Pop() requires synchronization!
+    }
+}
+
+// variable processor task -- as above in terms of functionality
+void task_variable_processor(work_pile_t& work)
+{
+    while (true) // keep running while there's still work to be done
+    {
+        auto text = work.Pop(); // this gets a work item, if one is available
+        if (!text.empty())
+        {
+            if (text.length() > 4)
+            {
+                printf("task_variable_processor from thread %u on %s\n", this_thread::get_id(), text.c_str());
+                this_thread::sleep_for(std::chrono::milliseconds(text.length())); // sleep for 5 milliseconds
+            }
+            else
+                work.Put(text);
+        }
+        this_thread::sleep_for(std::chrono::milliseconds(5)); // sleep for 5 milliseconds
+    }
+}
 
 int main(int argc, char **argv)
 {
-    // TODO: create threads
-
-    // Continuous loop that reads some text and pu
     work_pile_t work_pile;
 
-    // TODO: later on, replace this while loop with the lorem ipsum processing
-    while (true)
+    static const int NUM_THREADS = 10;
+    std::vector< std::thread> pool;
+    for (int i = 0; i < NUM_THREADS; ++i)
     {
-        std::string text;
-        std::cin >> text;
-        if (text == "stop")
-            break;
-        work_pile.Put(text);
+        if (i < (NUM_THREADS/2)) // half and half
+            pool.push_back(thread(task_fixed_processor,std::ref(work_pile)));
+        else
+            pool.push_back(thread(task_variable_processor, std::ref(work_pile)));
+        // The threads will be running forever (we have no way of telling them to stop, and they don't know when to stop), so we detach them
+        // By detaching them, we don't have to join them at the end
+        pool.back().detach();
     }
 
-    // TODO: exit gracefully
+    
 
+    const bool use_predefined_words = true;
+    if (use_predefined_words)
+    {
+        for (const auto& word : g_LoremIpsumParts)
+            work_pile.Put(word);
+    }
+    else // use text input instead
+    {
+        while (true)
+        {
+            std::string text;
+            std::cin >> text;
+            if (text == "stop")
+                break;
+            work_pile.Put(text);
+        }
+    }
+
+    // ok, done with input. Now wait for any threads to finish. If work_pile is empty, we're all done
+    while (work_pile.Num() > 0)
+        this_thread::sleep_for(std::chrono::milliseconds(5)); // wait!
+
+    // No join needed because threads are detached.
     return 0;
 }
