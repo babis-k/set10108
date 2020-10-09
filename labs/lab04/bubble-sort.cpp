@@ -42,8 +42,8 @@ int main(int argc, char **argv)
 {
     // Create results file
     ofstream results("bubble.csv", ofstream::out);
-    // Gather results for 2^8 to 2^16 results
-    for (size_t size = 8; size <= 16; ++size)
+    // Gather results for 2^6 to 2^12 results
+    for (size_t size = 6; size <= 12; ++size)
     {
         // Output data size
         results << pow(2, size) << ", ";

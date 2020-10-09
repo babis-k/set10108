@@ -28,9 +28,9 @@ void parallel_sort(vector<unsigned int>& values)
     // Get the number of elements in the vector
     auto n = values.size();
     // Declare the variables used in the loop
-    int i, tmp, phase;
+    int i, phase;
     // Declare parallel section
-#pragma omp parallel num_threads(num_threads) default(none) shared(values, n) private(i, tmp, phase)
+#pragma omp parallel num_threads(num_threads) default(none) shared(values, n) private(i, phase)
     for (phase = 0; phase < n; ++phase)
     {
         // Determine which phase of the sort we are in
@@ -42,28 +42,18 @@ void parallel_sort(vector<unsigned int>& values)
             {
                 // Check if we should swap values
                 if (values[i - 1] > values[i])
-                {
-                    // Swap values
-                    tmp = values[i - 1];
-                    values[i - 1] = values[i];
-                    values[i] = tmp;
-                }
+                    std::swap(values[i - 1], values[i]); // and swap
             }
         }
         else
         {
             // Parallel for loop.  Each thread jumps forward 2 so no conflict
 #pragma omp for
-            for (i = 1; i < n; i += 2)
+            for (i = 1; i < (n-1); i += 2)
             {
                 // Check is we should swap values
                 if (values[i] > values[i + 1])
-                {
-                    // Swap values
-                    tmp = values[i + 1];
-                    values[i + 1] = values[i];
-                    values[i] = tmp;
-                }
+                    std::swap(values[i + 1], values[i]); // and swap
             }
         }
     }
@@ -73,8 +63,8 @@ int main(int argc, char **argv)
 {
     // Create results file
     ofstream results("parallel.csv", ofstream::out);
-    // Gather results for 2^8 to 2^16 results
-    for (size_t size = 8; size <= 16; ++size)
+    // Gather results for 2^6 to 2^12 results
+    for (size_t size = 6; size <= 12; ++size)
     {
         // Output data size
         results << pow(2, size) << ", ";
