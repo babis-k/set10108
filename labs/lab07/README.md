@@ -4,6 +4,10 @@ You need to make sure you have the relevant SDK installed on the machine you are
 
 The header we will be using is `CL/cl.hpp`. The library is `OpenCL.lib`.  If you are having problems (e.g. library not found or `cl.hpp` not available) ask in the lab.
 
+If you don't have OpenCL libraries/headers installed, and you have an AMD card, you can get them from here: https://github.com/GPUOpen-LibrariesAndSDKs/OCL-SDK/releases
+For Intel card, there's Intel System Studio: https://software.intel.com/content/www/us/en/develop/tools/system-studio.html
+If you have an NVIDIA card, everything should be there, as part of your CUDA installation.
+
 ## Getting Started with OpenCL
 
 Our first application is setting up OpenCL.
