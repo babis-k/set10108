@@ -6,7 +6,7 @@ Today you'll practice creating your own programs to achieve the given tasks. Clo
 2. Edit the CMakeLists.txt file, remove all sources and replace them with your source files, which can start as the contents of vector addition.
 3. Configure and Generate in CMake, and start programming
 
-# Task 1: 1D smoothing
+## Task 1: 1D smoothing
 
 1. Create a vector of N random float values (between 0 and 1)
 2. Write a GPU kernel that applies smoothing to the values using an 1D Gaussian kernel (calculator here: http://dev.theomader.com/gaussian-kernel-calculator/)
@@ -15,7 +15,7 @@ Today you'll practice creating your own programs to achieve the given tasks. Clo
 
 You have to be careful with the bounds. You can try and use local memory for intermediate results, as shown in the lecture.
 
-# Task 2: 2D smoothing
+## Task 2: 2D smoothing
 
 1. Create a vector of MxN random float values (between 0 and 1), or use a grayscale image. You can use stb_image to load images.
 2. Write a GPU kernel that applies smoothing to the values using a 2D Gaussian kernel (calculator here: http://dev.theomader.com/gaussian-kernel-calculator/)
