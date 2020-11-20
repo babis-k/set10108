@@ -8,6 +8,9 @@
 #include <random>
 #include <CL/cl.hpp>
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
+
 using namespace std;
 using namespace cl;
 
@@ -66,18 +69,7 @@ int main(int argc, char **argv)
 		// Read the output buffer back to the host
 		queue.enqueueReadBuffer(bufResults, CL_TRUE, 0, ELEMENTS * sizeof(char), &results[0]);
 
-		// Dump image data as raw RGB.  You will need to convert it.
-		vector<char> rgb(ELEMENTS * 3);
-		for (std::size_t i = 0; i < ELEMENTS; ++i)
-		{
-			for (std::size_t j = 0; j < 3; ++j)
-			{
-				rgb[i * 3 + j] = results[i];
-			}
-		}
-		ofstream image("mandelbrot.rgb", ios::binary);
-		image.write(&rgb[0], rgb.size());
-		image.close();
+		stbi_write_png("mandelbrot.png", DIMENSION, DIMENSION,1, results.data(), DIMENSION * 1);
 
 		cout << "Finished" << endl;
 	}

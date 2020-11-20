@@ -36,6 +36,10 @@ int main(int argc, char **argv)
                 cout << "Max Memory: " << d.getInfo<CL_DEVICE_GLOBAL_MEM_SIZE>() / (1024 * 1024) << "MB" << endl;
                 cout << "Clock Freq: " << d.getInfo<CL_DEVICE_MAX_CLOCK_FREQUENCY>() << "MHz" << endl;
                 cout << "Available: " << (d.getInfo<CL_DEVICE_AVAILABLE>() ? "True" : "False") << endl;
+                cout << "Max Item Size X " << d.getInfo<CL_DEVICE_MAX_WORK_ITEM_SIZES>()[0]  << endl;
+                cout << "Max Item Size Y " << d.getInfo<CL_DEVICE_MAX_WORK_ITEM_SIZES>()[1] << endl;
+                cout << "Max Item Size Z " << d.getInfo<CL_DEVICE_MAX_WORK_ITEM_SIZES>()[2] << endl;
+                cout << "Max Group Size " << d.getInfo<CL_DEVICE_MAX_WORK_GROUP_SIZE>() << endl;
             }
             
             cout << endl;
