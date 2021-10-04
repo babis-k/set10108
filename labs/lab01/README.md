@@ -173,7 +173,7 @@ we can create a `thread` and pass in parameters to `n` and `val` as follows:
 thread t(task, 1, 20);
 ```
 
-`n` will be assigned 1 and `val` will be assigned 10. We will use random number generation to set these values.
+`n` will be assigned 1 and `val` will be assigned 20. We will use random number generation to set these values.
 
 ### Random Numbers in C++
 

@@ -122,6 +122,12 @@ The `srun` command is not ideal when we want to execute more things at a time, w
 
 Batch are a very convenient way of queuing up work. We typically provide a script that configures the batch job. The script is a simple shell script. Here's a tiny example, that runs our `hello_cluster` script using a job *array*.
 
+We will be executing the scripts through sbatch, e.g. 
+```
+sbatch --extra-params /path/to/myscript.sh
+```
+where your shell scripts can be in the home folder. But the contents of the scripts should not reference the home folder!
+
 ```bash
 #!/bin/sh
 #SBATCH --output=/share/40014784/hello_cluster.%a.log
