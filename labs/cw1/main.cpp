@@ -11,12 +11,20 @@
 
 namespace fs = std::filesystem;
 
+sf::Vector2f ScaleFromDimensions(const sf::Vector2u& textureSize, int screenWidth, int screenHeight)
+{
+    float scaleX = screenWidth / float(textureSize.x);
+    float scaleY = screenHeight / float(textureSize.y);
+    float scale = std::min(scaleX, scaleY);
+    return { scale, scale };
+}
+
 int main()
 {
     std::srand(static_cast<unsigned int>(std::time(NULL)));
 
     // example folder to load images
-    constexpr char* image_folder = "D:/photos_newest/jpg";
+    constexpr char* image_folder = "C:/Users/Babis/Desktop/par_images/unsorted";
     std::vector<std::string> imageFilenames;
     for (auto& p : fs::directory_iterator(image_folder))
         imageFilenames.push_back(p.path().u8string());
@@ -38,8 +46,8 @@ int main()
     if (!texture.loadFromFile(imageFilenames[imageIndex]))
         return EXIT_FAILURE;
     sf::Sprite sprite (texture);
-    // I'm being lazy here and playing safe, as input images can be huge. You can do it better! To fit the screen well
-    sprite.setScale(sf::Vector2f(0.1f,0.1f));
+    // Make sure the texture fits the screen
+    sprite.setScale(ScaleFromDimensions(texture.getSize(),gameWidth,gameHeight));
 
     sf::Clock clock;
     while (window.isOpen())
@@ -73,17 +81,21 @@ int main()
                     imageIndex = (imageIndex + imageFilenames.size() - 1) % imageFilenames.size();
                 else if (event.key.code == sf::Keyboard::Key::Right)
                     imageIndex = (imageIndex + 1) % imageFilenames.size();
+                // get image filename
+                const auto& imageFilename = imageFilenames[imageIndex];
+                // set it as the window title 
+                window.setTitle(imageFilename);
                 // ... and load the appropriate texture, and put it in the sprite
-                if (texture.loadFromFile(imageFilenames[imageIndex]))
+                if (texture.loadFromFile(imageFilename))
                 {
                     sprite = sf::Sprite(texture);
-                    sprite.setScale(sf::Vector2f(0.1f, 0.1f));
+                    sprite.setScale(ScaleFromDimensions(texture.getSize(), gameWidth, gameHeight));
                 }
             }
         }
 
         // Clear the window
-        window.clear(sf::Color(50, 200, 50));
+        window.clear(sf::Color(0, 0, 0));
         // draw the sprite
         window.draw(sprite);
         // Display things on screen
