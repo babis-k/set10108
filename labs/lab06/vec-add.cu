@@ -47,10 +47,6 @@ int main(int argc, char **argv)
 	cudaMemcpy(buffer_A, &A[0], data_size, cudaMemcpyHostToDevice);
 	cudaMemcpy(buffer_B, &B[0], data_size, cudaMemcpyHostToDevice);
 
-	// Write host data to device
-	cudaMemcpy(buffer_A, &A[0], data_size, cudaMemcpyHostToDevice);
-	cudaMemcpy(buffer_B, &B[0], data_size, cudaMemcpyHostToDevice);
-
 	// Run kernel with one thread for each element
 	// First value is number of blocks, second is threads per block.  Max 1024 threads per block
 	vecadd<<<ELEMENTS / 1024, 1024>>>(buffer_A, buffer_B, buffer_C);
