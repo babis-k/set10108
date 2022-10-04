@@ -6,9 +6,12 @@
 #include <random>
 #include <chrono>
 #include <mutex>
+#include <atomic>
 
 using namespace std;
 using namespace std::chrono;
+
+atomic<bool> g_IsRunning = true;
 
 /*
     Tasks: 
@@ -108,7 +111,7 @@ static const std::vector<std::string> g_LoremIpsumParts = LoremIpsumParts();
 // Fixed processor task
 void task_fixed_processor(work_pile_t& work)
 {
-    while (true) // keep running while there's still work to be done
+    while (g_IsRunning) // keep running while there's still work to be done
     {
         auto text = work.Pop(); // this gets a work item, if one is available
         if (!text.empty())
@@ -128,7 +131,7 @@ void task_fixed_processor(work_pile_t& work)
 // variable processor task -- as above in terms of functionality
 void task_variable_processor(work_pile_t& work)
 {
-    while (true) // keep running while there's still work to be done
+    while (g_IsRunning) // keep running while there's still work to be done
     {
         auto text = work.Pop(); // this gets a work item, if one is available
         if (!text.empty())
@@ -157,9 +160,6 @@ int main(int argc, char **argv)
             pool.push_back(thread(task_fixed_processor,std::ref(work_pile)));
         else
             pool.push_back(thread(task_variable_processor, std::ref(work_pile)));
-        // The threads will be running forever (we have no way of telling them to stop, and they don't know when to stop), so we detach them
-        // By detaching them, we don't have to join them at the end
-        pool.back().detach();
     }
 
     
@@ -186,6 +186,9 @@ int main(int argc, char **argv)
     while (work_pile.Num() > 0)
         this_thread::sleep_for(std::chrono::milliseconds(5)); // wait!
 
-    // No join needed because threads are detached.
+    // set to not running, and wait for threads to be done
+    g_IsRunning = false;
+    for (auto& t : pool)
+        t.join();
     return 0;
 }
