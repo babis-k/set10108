@@ -9,7 +9,7 @@ Today you'll practice creating your own programs to achieve the given tasks. Clo
 ## Task 1: 1D smoothing
 
 1. Create a vector of N random float values (between 0 and 1)
-2. Write a GPU kernel that applies smoothing to the values using an 1D Gaussian kernel (calculator here: http://dev.theomader.com/gaussian-kernel-calculator/)
+2. Write a GPU kernel that applies smoothing to the values using an 1D Gaussian kernel (calculator [here](https://web.archive.org/web/20220916052214/http://dev.theomader.com/gaussian-kernel-calculator/))
 3. Allow arbitrary kernel radius (remember that you'll need (2\*radius + 1) kernel elements)
 4. Visualise the results, by printing or otherwise.
 
