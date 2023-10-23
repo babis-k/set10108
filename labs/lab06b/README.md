@@ -18,7 +18,7 @@ You have to be careful with the bounds. You can try and use local memory for int
 ## Task 2: 2D smoothing
 
 1. Create a vector of MxN random float values (between 0 and 1), or use a grayscale image. You can use stb_image to load images.
-2. Write a GPU kernel that applies smoothing to the values using a 2D Gaussian kernel (calculator here: https://web.archive.org/web/20220916052214/http://dev.theomader.com/gaussian-kernel-calculator/)
+2. Write a GPU kernel that applies smoothing to the values using a 2D Gaussian kernel (calculator [here](https://web.archive.org/web/20220916052214/http://dev.theomader.com/gaussian-kernel-calculator/))
 3. Allow arbitrary kernel radius (remember that you'll need (2\*radius + 1)<sup>2</sup> kernel elements)
 4. Visualise the results. You can convert the results to an image using stb_image.
 
