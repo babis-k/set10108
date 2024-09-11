@@ -111,6 +111,8 @@ As we progress through the module, we will find that the other pieces of informa
 
 ## Linear index, cache and performance
 
+(The accompanying code for this section is ```02-linear-index```)
+
 With GPU programming and when dealing with images, we have to use multi-dimensional arrays. For example, an image is a 2D array of pixel values. How we represent and process such arrays can have a critical effect on performance, and the reason is *cache performance* (cache hits and cache misses). 
 
 Cache memory is small and fast. When we access memory (e.g. a variable, or an element of an array), the CPU checks if the data is in cache, and if it's not, it copies the data **plus neighbouring data** to the cache, so that next time we access that or nearby memory, it will be fetched from the cache. If the data is not in the cache (*cache miss*), there is an associated perfomance penalty to access slower memory and copy the data to the cache. We should always aim to minimise cache misses.
@@ -162,7 +164,7 @@ for (int x = 0; x < width; ++x)
 What happens in the second example? Let's break it down, in the context of cache
 
 * access x==0, y==0: not in cache, so copy the entire vector (all elements where y==0)
-* access x==0, y==1: not in cache, so copy the entire vector. We have all elements where y==0, but we jumped an entire row
+* access x==0, y==1: not in cache, so copy the entire vector. We have all elements where y==0 already in cache, but we jumped an entire row, and the new row's elements are not in cache yet. So, we copy them here.
 * access x==0, y==2: as above
 * ...
 * access x==1, y==0: probably not in cache, as all the previous accesses would have caused all other rows to get copied into the cache, and we might have run out of space, deleting the oldest entries first (where y==0)
