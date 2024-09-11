@@ -132,6 +132,8 @@ Assuming a desired row-major representation, each inner vector will represent a 
 
 The entire point of specifying the datatype as a vector of vectors for a 2D array, is to be able to access elements as ```array2d_vecvec[i][j]```
 
+![By Cmglee - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=65107030](img/Row_and_column_major_order.png "Row and Column Major Order")
+
 ### Using a 1D array to represent 2D arrays
 
 In the case of 2D arrays, we know in advance that we have ```width * height``` elements. Therefore, we can represent a 2D array by using a 1D array and converting the row and column indices to a single, flattened index (AKA linear index). Assuming a row-major order, we calculate the linear index as follows: ```linearIndex = row * width + column```. The benefits of this representation are multiple: 
