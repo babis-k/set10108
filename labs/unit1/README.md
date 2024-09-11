@@ -53,7 +53,6 @@ data << total.count() << endl;
 Our complete application is below:
 
 ```cpp
-#include <thread>
 #include <chrono>
 #include <iostream>
 #include <fstream>
