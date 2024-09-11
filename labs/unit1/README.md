@@ -111,7 +111,7 @@ As we progress through the module, we will find that the other pieces of informa
 
 ## Linear index, cache and performance
 
-(The accompanying code for this section is ```02-linear-index```)
+(The accompanying code for this section is in ```linear-index.cpp```)
 
 With GPU programming and when dealing with images, we have to use multi-dimensional arrays. For example, an image is a 2D array of pixel values. How we represent and process such arrays can have a critical effect on performance, and the reason is *cache performance* (cache hits and cache misses). 
 
