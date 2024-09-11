@@ -174,6 +174,10 @@ What happens in the second example? Let's break it down, in the context of cache
 So this is a worst case scenario. Accessing the multi-dimensional arrays in the wrong order is also very destructive for performance when using the 1D array approach above.
 All this is demonstrated in code, in the ```linear-index``` application. Change the dimensions of the array to notice different effects: when the 2D array is small enough to fit in cache (e.g. 1000x1000), there is minimal performance penalty from incorrect traversal order. But, the bigger the array, the bigger the effect.
 
+### Why are we talking about performance in the first lab?
+
+You might be wondering this, so here's a reminder: we use parallelism for improving performance in our application. If you run the test application, and use big enough values for the array size (e.g. 10000 x 10000) you will realize that good versus bad use of the cache can result in the application running 10 times faster or slower! 
+
 ## Lambda (λ)-Expressions
 
 Lambda (λ)-expressions are becoming popular in object-oriented languages. λ-expressions come from functional languages, e.g. F#, Haskell, etc.  They allow function objects which we can apply parameters to and get a result.

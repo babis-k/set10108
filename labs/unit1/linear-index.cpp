@@ -102,8 +102,8 @@ struct stopwatch_t
 int main(int argc, char** argv)
 {
     const int numTests = 10;
-    const int width = 3840;
-    const int height = 2160;
+    const int width = 13840;
+    const int height = 12160;
 
     stopwatch_t stopwatch;
     std::vector<std::vector<uint32_t>> array2d_vecvec;
