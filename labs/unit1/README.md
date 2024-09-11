@@ -132,8 +132,6 @@ Assuming a desired row-major representation, each inner vector will represent a 
 
 The entire point of specifying the datatype as a vector of vectors for a 2D array, is to be able to access elements as ```array2d_vecvec[i][j]```
 
-![By Cmglee - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=65107030](img/Row_and_column_major_order.png "Row and Column Major Order")
-
 ### Using a 1D array to represent 2D arrays
 
 In the case of 2D arrays, we know in advance that we have ```width * height``` elements. Therefore, we can represent a 2D array by using a 1D array and converting the row and column indices to a single, flattened index (AKA linear index). Assuming a row-major order, we calculate the linear index as follows: ```linearIndex = row * width + column```. The benefits of this representation are multiple: 
@@ -144,6 +142,35 @@ In the case of 2D arrays, we know in advance that we have ```width * height``` e
 
 ### Traversing arrays in the wrong order
 
+Consider the following code:
+
+```
+std::vector<std::vector<SomeType>> array2d_vecvec;
+// ... allocate the outer and inner vectors
+
+// Fill with data in a row-major order
+for (int y = 0; y < height; ++y)
+	for (int x = 0; x < width; ++x)
+		array2d_vecvec[y][x] = ...;
+
+// Fill with data in a column-major order
+for (int x = 0; x < width; ++x)
+	for (int y = 0; y < height; ++y)
+		array2d_vecvec[y][x] = ...;
+```
+
+What happens in the second example? Let's break it down, in the context of cache
+
+* access x==0, y==0: not in cache, so copy the entire vector (all elements where y==0)
+* access x==0, y==1: not in cache, so copy the entire vector. We have all elements where y==0, but we jumped an entire row
+* access x==0, y==2: as above
+* ...
+* access x==1, y==0: probably not in cache, as all the previous accesses would have caused all other rows to get copied into the cache, and we might have run out of space, deleting the oldest entries first (where y==0)
+* access x==1, y==1: as above
+* ....
+
+So this is a worst case scenario. Accessing the multi-dimensional arrays in the wrong order is also very destructive for performance when using the 1D array approach above.
+All this is demonstrated in code, in the ```linear-index``` application. Change the dimensions of the array to notice different effects: when the 2D array is small enough to fit in cache (e.g. 1000x1000), there is minimal performance penalty from incorrect traversal order. But, the bigger the array, the bigger the effect.
 
 ## Lambda (λ)-Expressions
 
