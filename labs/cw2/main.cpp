@@ -96,8 +96,6 @@ int main()
 {
     std::srand(static_cast<unsigned int>(std::time(NULL)));
 
-    // Stage 1: Gather all images from given folder
-
     // example folder to load images
     const char* image_folder = "images/unsorted";
     if (!fs::is_directory(image_folder))
