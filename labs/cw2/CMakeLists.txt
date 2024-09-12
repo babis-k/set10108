@@ -1,10 +1,29 @@
-project(set10108-cw02 LANGUAGES CXX)
+project(set10108-cw2)
 cmake_minimum_required(VERSION 3.17)
 set(CMAKE_CXX_STANDARD 17)
 
-#### OPEN MP PACKAGES ####
-find_package(OpenMP)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+include_directories(../contrib)
+if (WIN32)
+include_directories(../contrib/sfml/include)
 
-add_executable(NQueens nqueens.cpp)
+link_directories(../contrib/sfml/lib/Debug)
+link_directories(../contrib/sfml/lib/Release)
+else()
+find_package(SFML 2.5 COMPONENTS window graphics system REQUIRED)
+endif()
+
+add_executable(cw2 main.cpp)
+
+target_link_libraries(cw2 optimized sfml-system optimized sfml-window optimized sfml-graphics debug sfml-system-d debug sfml-window-d debug sfml-graphics-d)
+
+
+add_custom_command(TARGET cw2 POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/../contrib/sfml/lib/Debug"       # Source folder with DLLs
+    "$<TARGET_FILE_DIR:cw2>" # Destination: the directory of the executable
+)
+add_custom_command(TARGET cw2 POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/../contrib/sfml/lib/Release"       # Source folder with DLLs
+    "$<TARGET_FILE_DIR:cw2>" # Destination: the directory of the executable
+)
