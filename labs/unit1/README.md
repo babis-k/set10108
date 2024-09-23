@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     // Create a new file
     ofstream data("data.csv", ofstream::out);
     uint64_t total_ns = 0;
-    // We’re going to gather 100 readings , so create a thread and join it 100 times
+    // We’re going to gather 100 readings , so do some (meaningless) work 100 times
     int n=0;
     for (int i = 0; i < 100; ++i)
     {
