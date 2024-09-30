@@ -43,9 +43,9 @@ std::vector<char> read_file(const char* filename)
     return buffer;
 }
 
-int calc_token_occurences(const std::vector<char>& data, const char* token)
+int calc_token_occurrences(const std::vector<char>& data, const char* token)
 {
-    int numOccurences = 0;
+    int numOccurrences = 0;
     int tokenLen = int(strlen(token));
     for (int i = 0; i< int(data.size()); ++i)
     {
@@ -63,9 +63,9 @@ int calc_token_occurences(const std::vector<char>& data, const char* token)
         auto iSuffix = i + tokenLen;
         if (iSuffix < int(data.size()) && data[iSuffix] >= 'a' && data[iSuffix] <= 'z')
             continue;
-        ++numOccurences;
+        ++numOccurrences;
     }
-    return numOccurences;
+    return numOccurrences;
 }
 
 int main()
@@ -81,8 +81,8 @@ int main()
     const char * words[] = {"sword", "fire", "death", "love", "hate", "the", "man", "woman"};
     for(const char * word : words)
     {
-        int occurences = calc_token_occurences(file_data, word);
-        std::cout << "Found "<< occurences << " occurences of word: " << word << std::endl;
+        int occurrences = calc_token_occurrences(file_data, word);
+        std::cout << "Found "<< occurrences << " occurrences of word: " << word << std::endl;
     }
 
     return 0;
