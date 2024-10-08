@@ -2,7 +2,7 @@
 
 Today you'll practice creating your own programs to achieve the given tasks. Clone the base project to have a base to begin with:
 
-1. Copy the CMakeListst.txt from another lab folder (unit2 if CUDA, unit4 if OpenCL) here 
+1. Copy the CMakeLists.txt from another lab folder (unit2 if CUDA, unit4 if OpenCL) here 
 2. Edit the CMakeLists.txt file, remove all sources and replace them with your source files, which can start as the contents of vector addition.
 3. Configure and Generate in CMake, and start programming
 
