@@ -55,7 +55,7 @@ int main(int argc, char **argv)
         string code(istreambuf_iterator<char>(file), (istreambuf_iterator<char>()));
         
         // Create program
-        Program::Sources source(1, make_pair(code.c_str(), code.length() + 1));
+        Program::Sources source = { code };
         Program program(context, source);
 
         // Build program for devices
